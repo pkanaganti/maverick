@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from . import views
 from django.urls import path
+# from django.contrib.auth.views import password_change, password_change_done
 
 app_name = 'crm'
 urlpatterns = [
@@ -8,8 +9,9 @@ urlpatterns = [
     path('', views.home, name='home'),
     url(r'^home/$', views.home, name='home'),
     url(r'^signup/$', views.signup, name='signup'),
-    # url(r'^password-change/$', 'django.contrib.auth.views.password_change', name='password_change'),
-    # url(r'^password-change/done/$', 'django.contrib.auth.views.password_change_done', name='password_change_done'),
+    # url(r'^password-change/$', password_change, {'post_change_redirect': '/password-change/done/'},name='password_change'),
+    # url(r'^password-change/done/$', password_change_done, name='password_change_done'),
+    url(r'^password/$', views.change_password, name='change_password'),
     path('customer_list', views.customer_list, name='customer_list'),
     path('customer/<int:pk>/edit/', views.customer_edit, name='customer_edit'),
     path('customer/<int:pk>/delete/', views.customer_delete, name='customer_delete'),
