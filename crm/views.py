@@ -5,10 +5,7 @@ from .models import *
 from .forms import *
 from django.db.models import Sum
 from django.contrib.auth import login, authenticate
-from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
-from django.shortcuts import render, redirect
+
 # Create your views here.
 
 now = timezone.now()
@@ -16,36 +13,20 @@ def home(request):
    return render(request, 'crm/home.html',
                  {'crm': home})
 
-def change_password(request):
+def signup(request):
+    global form
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('change_password')
-        else:
-            messages.error(request, 'Please correct the error below.')
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('crm:login')
     else:
-        form = PasswordChangeForm(request.user)
-    return render(request, 'registration/change_password.html', {
-        'form': form
-    })
-
-# def signup(request):
-#     global form
-#     if request.method == 'POST':
-#         form = SignUpForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             username = form.cleaned_data.get('username')
-#             raw_password = form.cleaned_data.get('password1')
-#             user = authenticate(username=username, password=raw_password)
-#             login(request, user)
-#             return redirect('crm:login')
-#     else:
-#             return render(request,'registration/signup.html',
-#                  {'registration': signup} )
+            return render(request,'registration/signup.html',
+                 {'registration': signup} )
 
 @login_required
 def customer_list(request):
