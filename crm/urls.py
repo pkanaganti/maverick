@@ -8,7 +8,7 @@ urlpatterns = [
 
     path('', views.home, name='home'),
     url(r'^home/$', views.home, name='home'),
-    url(r'^signup/$', views.signup, name='signup'),
+    # url(r'^signup/$', signup, {'post_change_redirect': '/signup/done/'}, name='signup'),
     url(r'^password-change/$', password_change, {'post_change_redirect': '/password-change/done/'}, name='password_change'),
     url(r'^password-change/done/$', password_change_done, name='password_change_done'),
     path('customer_list', views.customer_list, name='customer_list'),
